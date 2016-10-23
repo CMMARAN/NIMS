@@ -5,6 +5,7 @@ class PPI:
         self.disease = disease
         self.graph = graph
         self.network = self._network()
+        self.prot_dist = self.get_all_shortest_path()
 
 
     def name(self):
@@ -51,8 +52,22 @@ class PPI:
 
 
     def shortest_path(self, proteinA=None, proteinB=None):
-        return nx.shortest_path_length(self.network, source=proteinA, target=proteinB)
+        try:
+            shortest = nx.shortest_path_length(self.network, source=proteinA, target=proteinB)
+        except:
+            shortest = -1.2
+        return shortest
 
     def get_all_proteins(self):
         n = self.network
         return n.nodes()
+
+    def get_all_shortest_path(self):
+        res = {}
+        prots = self.get_all_proteins()
+        for p in prots:
+            for r in prots:
+                if p != r and ((p,r) not in res.keys() and (r,p) not in res.keys()):
+                    distance = float(self.shortest_path(p, r))
+                    res[(p,r)] = distance
+        return res

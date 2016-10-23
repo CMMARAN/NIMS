@@ -1,10 +1,12 @@
-from data.dm_comps import comps
+from data.final_comp_dm import compounds as comps
 
 class Compound:
-    def __init__(self, c_id):
+    def __init__(self, c_id, metabolite=None, cas_id=None,
+                 molecul_formula=None, mass=None, plants=None,
+                 smiles=None, compound_target=None):
         self.c_id = c_id
         self.comp = self._find_compound(c_id)
-        self.cas_id = self.get_cas_id
+        self.cas_id = self.get_cas_id()
         self.metabolite = self.get_metabolite()
         self.molecul_formula = self.get_molecul_formula()
         self.mass = self.get_mass()
@@ -14,6 +16,7 @@ class Compound:
 
     def _find_compound(self, c_id):
         return comps[c_id]
+            
 
     def get_c_id():
         return self.c_id
@@ -37,7 +40,9 @@ class Compound:
         return self.comp[5]
 
     def get_compound_target(self):
-        pass
+        return self.comp[6]
 
     def set_compound_target(self, protein):
-        self.compound_target.append(protein)
+        if protein not in self.comp[6]:
+            self.compound_target.append(protein)
+        return
