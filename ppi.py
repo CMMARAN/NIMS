@@ -22,45 +22,49 @@ class PPI:
         b = nx.betweenness_centrality(self.network)
         if protein:
             protein = protein.upper()
-            for key in b:
-                if key == protein:
-                    return b[protein]
-            return ("%s not found in this PPI"%protein)
-        return sorted(b.items(), key=lambda x: x[1], reverse=True)
+            try:
+                return b[protein]
+            except:
+                return ("%s not found in this PPI"%protein)
+        return b
 
 
     def closeness(self, protein=None):
         c = nx.closeness_centrality(self.network)
         if protein:
             protein = protein.upper()
-            for key in c:
-                if key == protein:
-                    return c[protein]
-            return ("%s not found in this PPI"%protein)
-        return sorted(c.items(), key=lambda x: x[1], reverse=True)
+            try:
+                return c[protein]
+            except:
+                return ("%s not found in this PPI"%protein)
+        return c
 
 
     def degree(self, protein=None):
         d = nx.degree_centrality(self.network)
         if protein:
             protein = protein.upper()
-            for key in d:
-                if key == protein:
-                    return d[protein]
-            return ("%s not found in this PPI"%protein)
-        return sorted(d.items(), key=lambda x: x[1], reverse=True)
+            try:
+                return d[protein]
+            except:
+                return ("%s not found in this PPI"%protein)
+        return d
 
 
     def shortest_path(self, proteinA=None, proteinB=None):
         try:
-            shortest = nx.shortest_path_length(self.network, source=proteinA, target=proteinB)
+            shortest = nx.shortest_path_length(
+                self.network, source=proteinA, target=proteinB
+            )
         except:
             shortest = -1.2
         return shortest
 
+
     def get_all_proteins(self):
         n = self.network
         return n.nodes()
+
 
     def get_all_shortest_path(self):
         res = {}
