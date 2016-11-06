@@ -1,4 +1,5 @@
 import networkx as nx
+from math import inf
 
 class PPI:
     def __init__(self, disease, graph):
@@ -57,7 +58,7 @@ class PPI:
                 self.network, source=proteinA, target=proteinB
             )
         except:
-            shortest = -1.2
+            shortest = inf
         return shortest
 
 

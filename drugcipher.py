@@ -4,7 +4,7 @@ from time import time, mktime
 from ppi import PPI
 from compound import Compound
 from indigo.indigo import *
-from math import exp
+from math import exp, inf
 from collections import OrderedDict
 
 
@@ -61,10 +61,7 @@ class Drugcipher:
                         distance = self.prot_dist[(protein, c)]
                     except:
                         distance = self.prot_dist[(c, protein)]
-            if distance != -1.2:
-                closeness = exp((distance*(-1))**2)
-            else:
-                closeness = 0
+            closeness = exp((distance*(-1))**2) if distance != inf else 0
             total_distance += closeness
         return total_distance
 

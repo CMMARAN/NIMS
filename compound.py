@@ -1,4 +1,4 @@
-from data.final_comp_dm import compounds as comps
+from data.final_comp_dm_set import compounds as comps
 
 class Compound:
     def __init__(self, c_id, metabolite=None, cas_id=None,
