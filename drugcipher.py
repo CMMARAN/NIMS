@@ -4,7 +4,7 @@ from time import time, mktime
 from ppi import PPI
 from compound import Compound
 from indigo.indigo import *
-from math import exp
+from math import exp, inf
 from collections import OrderedDict
 
 
@@ -18,7 +18,6 @@ class Drugcipher:
 
 
     def count_cs(self, compA, compB):
-        #hitung tanimoto
         c = self.chem_sim
         if (compA.c_id, compB.c_id) not in c.keys() and (compB.c_id, compA.c_id) not in c.keys():
             indigo = Indigo()
@@ -35,8 +34,6 @@ class Drugcipher:
                 cs = c[(compA.c_id, compB.c_id)]
             except:
                 cs = c[(compB.c_id, compA.c_id)]
-
-        # print("chemical similiarity for: ", compA.c_id, compB.c_id, cs)
 
         return cs
 
@@ -57,7 +54,6 @@ class Drugcipher:
                 distance = 0
             else:
                 if (protein, c) not in key and (c, protein) not in key:
-                    print("Belum ada:", protein, c)
                     distance = float(self.ppi.shortest_path(protein, c)) 
                     self.prot_dist[(protein, c)] = distance
                 else:
@@ -65,10 +61,7 @@ class Drugcipher:
                         distance = self.prot_dist[(protein, c)]
                     except:
                         distance = self.prot_dist[(c, protein)]
-            if distance != -1.2:
-                closeness = exp((distance*(-1))**2)
-            else:
-                closeness = 0
+            closeness = exp((distance*(-1))**2) if distance != inf else 0
             total_distance += closeness
         return total_distance
 
@@ -95,11 +88,10 @@ class Drugcipher:
             sum += ((a[i] - a_mean) * (b[i] - b_mean))
         return sum/(len(a)-1)
 
+
     def get_proteins_rank(self, compound, limit):
-        # print("Starting ranking proteins for:", compound.c_id)
         rank = {}
         cs = self.cs_all(compound=compound, compounds=self.compounds)
-        # print("Counting protein-compound closeness all for:", compound.c_id)
         prot_comp = self.prot_comp_closeness_all(self.proteins, self.compounds)
         for prot, distance in prot_comp.items():
             if all(v == 0 for v in distance):
@@ -107,7 +99,6 @@ class Drugcipher:
             else:
                 concordance = self.cov(cs, distance) / (np.std(cs) * np.std(distance))
             rank[prot] = concordance
-            # print("Prot: ", prot, " Compound: ", compound.c_id, " Concordance: ", concordance)
         rank_ordered = sorted(rank.items(), key=operator.itemgetter(1), reverse=True)
         prots = []
         i = 0
@@ -132,6 +123,7 @@ class Drugcipher:
         compound_targets = compound.get_compound_target()
         print("Compound target now", compound_targets)
 
+
     def run(self):
         awal = time()
         print("Total protein distance awal:", len(self.prot_dist))
@@ -141,4 +133,4 @@ class Drugcipher:
         gap = akhir - awal
         print("Total chemical similiarty:", len(self.chem_sim))
         print("Total protein distance akhir:", len(self.prot_dist))
-        print("Script done in ", gap, " Seconds")
+        print("Script done in", gap, "seconds")
