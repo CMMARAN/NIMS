@@ -1,6 +1,6 @@
 import numpy as np
 import operator
-from time import time, mktime
+from time import time
 from ppi import PPI
 from compound import Compound
 from indigo.indigo import *
@@ -19,7 +19,8 @@ class Drugcipher:
 
     def count_cs(self, compA, compB):
         c = self.chem_sim
-        if (compA.c_id, compB.c_id) not in c.keys() and (compB.c_id, compA.c_id) not in c.keys():
+        if ((compA.c_id, compB.c_id) not in c.keys() and 
+            (compB.c_id, compA.c_id) not in c.keys()):
             indigo = Indigo()
             m1 = indigo.loadMolecule(compA.smiles)
             m2 = indigo.loadMolecule(compB.smiles)
@@ -34,7 +35,6 @@ class Drugcipher:
                 cs = c[(compA.c_id, compB.c_id)]
             except:
                 cs = c[(compB.c_id, compA.c_id)]
-
         return cs
 
 
@@ -72,7 +72,9 @@ class Drugcipher:
             dist = []
             for compound in compounds:
                 compound_targets = compound.get_compound_target()
-                total_distance = self.prot_comp_closeness(protein, compound_targets)
+                total_distance = self.prot_comp_closeness(
+                    protein, compound_targets
+                )
                 dist.append(total_distance)
             res[protein] = dist
 
@@ -97,9 +99,14 @@ class Drugcipher:
             if all(v == 0 for v in distance):
                 concordance = 0
             else:
-                concordance = self.cov(cs, distance) / (np.std(cs) * np.std(distance))
+                denom = np.std(cs) * np.std(distance)
+                concordance = self.cov(cs, distance) / denom
             rank[prot] = concordance
-        rank_ordered = sorted(rank.items(), key=operator.itemgetter(1), reverse=True)
+        rank_ordered = sorted(
+            rank.items(),
+            key=operator.itemgetter(1),
+            reverse=True
+        )
         prots = []
         i = 0
         for x in rank_ordered:

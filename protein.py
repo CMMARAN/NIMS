@@ -27,4 +27,3 @@ class Protein:
 
     def get_gi(self):
         return self.prot[2]
-

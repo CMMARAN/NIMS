@@ -82,15 +82,15 @@ class Nims:
 
 
     def all_TS(self):
-        final = {}
+        TS = {}
         for compA in self.compounds:
             for compB in self.compounds:
                 if (compA != compB and
-                    (compA.c_id, compB.c_id) not in final.keys()
-                    and (compB.c_id, compA.c_id) not in final.keys()):
+                    (compA.c_id, compB.c_id) not in TS.keys()
+                    and (compB.c_id, compA.c_id) not in TS.keys()):
                     res = self.topology_score(compA, compB)
-                    final[(compA.c_id, compB.c_id)] = res
-        return final
+                    TS[(compA.c_id, compB.c_id)] = res
+        return TS
 
 
     def agent_score(self, compA, compB):

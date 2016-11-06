@@ -72,7 +72,9 @@ class PPI:
         prots = self.get_all_proteins()
         for p in prots:
             for r in prots:
-                if p != r and ((p,r) not in res.keys() and (r,p) not in res.keys()):
+                if (p != r and 
+                    ((p,r) not in res.keys() and 
+                     (r,p) not in res.keys())):
                     distance = float(self.shortest_path(p, r))
                     res[(p,r)] = distance
         return res
