@@ -1,6 +1,8 @@
-from data.final_comp_dm_set import compounds as comps
+from data.final_comp_dm_drugcipher import compounds as comps
+
 
 class Compound:
+
     def __init__(self, c_id, metabolite=None, cas_id=None,
                  molecul_formula=None, mass=None, plants=None,
                  smiles=None, compound_target=None):
@@ -16,9 +18,8 @@ class Compound:
 
     def _find_compound(self, c_id):
         return comps[c_id]
-            
 
-    def get_c_id():
+    def get_c_id(self):
         return self.c_id
 
     def get_cas_id(self):

@@ -1,14 +1,12 @@
 import numpy as np
 import operator
-from time import time, mktime
-from ppi import PPI
-from compound import Compound
+from time import time
 from indigo.indigo import *
 from math import exp, inf
-from collections import OrderedDict
 
 
 class Drugcipher:
+
     def __init__(self, ppi, compounds):
         self.ppi = ppi
         self.compounds = compounds
@@ -16,10 +14,10 @@ class Drugcipher:
         self.prot_dist = ppi.prot_dist
         self.chem_sim = {}
 
-
     def count_cs(self, compA, compB):
         c = self.chem_sim
-        if (compA.c_id, compB.c_id) not in c.keys() and (compB.c_id, compA.c_id) not in c.keys():
+        if ((compA.c_id, compB.c_id) not in c.keys() and
+                (compB.c_id, compA.c_id) not in c.keys()):
             indigo = Indigo()
             m1 = indigo.loadMolecule(compA.smiles)
             m2 = indigo.loadMolecule(compB.smiles)
@@ -34,9 +32,7 @@ class Drugcipher:
                 cs = c[(compA.c_id, compB.c_id)]
             except:
                 cs = c[(compB.c_id, compA.c_id)]
-
         return cs
-
 
     def cs_all(self, compound, compounds=None):
         row = []
@@ -44,7 +40,6 @@ class Drugcipher:
             cs = self.count_cs(compound, compB)
             row.append(cs)
         return row
-
 
     def prot_comp_closeness(self, protein, compound_targets):
         total_distance = 0
@@ -54,17 +49,16 @@ class Drugcipher:
                 distance = 0
             else:
                 if (protein, c) not in key and (c, protein) not in key:
-                    distance = float(self.ppi.shortest_path(protein, c)) 
+                    distance = float(self.ppi.shortest_path(protein, c))
                     self.prot_dist[(protein, c)] = distance
                 else:
                     try:
                         distance = self.prot_dist[(protein, c)]
                     except:
                         distance = self.prot_dist[(c, protein)]
-            closeness = exp((distance*(-1))**2) if distance != inf else 0
+            closeness = exp((distance * (-1))**2) if distance != inf else 0
             total_distance += closeness
         return total_distance
-
 
     def prot_comp_closeness_all(self, proteins, compounds):
         res = {}
@@ -72,7 +66,9 @@ class Drugcipher:
             dist = []
             for compound in compounds:
                 compound_targets = compound.get_compound_target()
-                total_distance = self.prot_comp_closeness(protein, compound_targets)
+                total_distance = self.prot_comp_closeness(
+                    protein, compound_targets
+                )
                 dist.append(total_distance)
             res[protein] = dist
 
@@ -86,8 +82,7 @@ class Drugcipher:
         sum = 0
         for i in range(0, len(a)):
             sum += ((a[i] - a_mean) * (b[i] - b_mean))
-        return sum/(len(a)-1)
-
+        return sum / (len(a) - 1)
 
     def get_proteins_rank(self, compound, limit):
         rank = {}
@@ -97,9 +92,14 @@ class Drugcipher:
             if all(v == 0 for v in distance):
                 concordance = 0
             else:
-                concordance = self.cov(cs, distance) / (np.std(cs) * np.std(distance))
+                denom = np.std(cs) * np.std(distance)
+                concordance = self.cov(cs, distance) / denom
             rank[prot] = concordance
-        rank_ordered = sorted(rank.items(), key=operator.itemgetter(1), reverse=True)
+        rank_ordered = sorted(
+            rank.items(),
+            key=operator.itemgetter(1),
+            reverse=True
+        )
         prots = []
         i = 0
         for x in rank_ordered:
@@ -107,30 +107,26 @@ class Drugcipher:
                 prots.append(x[0])
             else:
                 break
-            i+=1
-        print("Proteins to be added to", compound.c_id,":", prots)
+            i += 1
+        # print("Proteins to be added to", compound.c_id, ":", prots)
         return prots
 
-
     def extend_compound_target(self, compound):
-        print("Starting extend compound: ", compound.c_id)
+        # print("Starting extend compound: ", compound.c_id)
         compound_targets = compound.get_compound_target()
-        print("Compound target: ", compound_targets)
+        # print("Compound target: ", compound_targets)
         proteins = self.get_proteins_rank(compound, 5)
         for p in proteins:
             if p not in compound_targets:
                 compound.set_compound_target(p)
         compound_targets = compound.get_compound_target()
-        print("Compound target now", compound_targets)
-
+        print('''"{}": {}'''.format(compound.c_id, compound_targets))
+        # print("Compound target now", compound_targets)
 
     def run(self):
         awal = time()
-        print("Total protein distance awal:", len(self.prot_dist))
         for compound in self.compounds:
             self.extend_compound_target(compound)
         akhir = time()
         gap = akhir - awal
-        print("Total chemical similiarty:", len(self.chem_sim))
-        print("Total protein distance akhir:", len(self.prot_dist))
         print("Script done in", gap, "seconds")

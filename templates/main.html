@@ -1,1 +1,65 @@
-Hello World!
+<html>
+    <head>
+    <title>NIMS | Synergistic Score</title>
+    </head>
+    <body>
+        <h2>Network target-based Identification of Multicomponent Synergy (NIMS)</h2>
+        <h4>Counting Synergistic Score between a pair of compounds against disease</h4>
+        <form action="" method="post">
+        <table>
+        <tr>
+         <!--    <td>Senyawa 1</td>
+            <td>Senyawa 2</td>
+            <td></td> -->
+        </tr>
+        <tr>
+        <td>
+        <select>
+        <option value="">Compound 1</option>
+          {% for d in data %}
+          <option value="{{ d.metabolite }}">{{ d.metabolite }}</option>
+          {% endfor %}
+        </select>
+        </td>
+        <td>
+        <select>
+        <option value="">Compound 2</option>
+          {% for d in data %}
+        <option value="{{ d.metabolite }}">{{ d.metabolite }}</option>
+          {% endfor %}
+        </select>
+        <select>
+        <option value="">Disease</option>
+        <option value="">Diabetes Mellitus</option>
+        </select>
+        </td>
+        <td>
+        <button type="submit">Submit</button>
+        </td>
+        </tr>
+        </table>
+        </form>
+        <table>
+        <tr>
+            <td>Chemical Similarity</td>
+            <td>:</td>
+        </tr>
+        <tr>
+            <td>Topology Score</td>
+            <td>:</td>
+        </tr>
+        <tr>
+            <td>Agent Score</td>
+            <td>:</td>
+        </tr>
+        <tr>
+            <td>Synergy Score</td>
+            <td>:</td>
+        </tr>
+        <tr>
+            <td>Ranking</td>
+            <td>:</td>
+        </tr>
+        </table>
+    </body>
+</html>

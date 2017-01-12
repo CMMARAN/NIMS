@@ -1,7 +1,9 @@
 from data.final_prot_dm import protein as prot
 
+
 class Protein:
-    def __init__(self, name, phenotype=None, 
+
+    def __init__(self, name, phenotype=None,
                  gene_name=None, smiles=None):
         self.prot = self._find_prot(name)
         self.name = name
@@ -27,4 +29,3 @@ class Protein:
 
     def get_gi(self):
         return self.prot[2]
-
