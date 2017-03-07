@@ -103,14 +103,13 @@ class Nims:
     def all_TS(self):
         for compA in self.compounds:
             for compB in self.compounds:
-                if (compA != compB and
-                    ((compA.metabolite, compB.metabolite) not in self.TS.keys() or
+                if (((compA.metabolite, compB.metabolite) not in self.TS.keys() or
                     (compB.metabolite, compA.metabolite) not in self.TS.keys())):
                     res = self.topology_score(compA, compB)
                     self.TS[(compA.metabolite, compB.metabolite)] = res
                     self.TS[(compB.metabolite, compA.metabolite)] = res
 
-        pickle.dump(self.TS, open("data/TS.pkl", "wb"))
+        pickle.dump(self.TS, open("data/TS1.pkl", "wb"))
         return self.TS
 
     def generate_HPO(self):
@@ -131,7 +130,7 @@ class Nims:
 
         proteins = [protA, protB]
         PS = test_similarity(
-            self.pheno_graph, self.pheno_db, proteins, 100000, "resnik")
+            self.pheno_graph, self.pheno_db, proteins, "resnik")
         return PS if PS > 0 else 0
 
     def agent_score(self, compA, compB):
@@ -168,8 +167,7 @@ class Nims:
         self.generate_HPO()
         for compA in self.compounds:
             for compB in self.compounds:
-                if (compA != compB and
-                        ((compA.metabolite, compB.metabolite) not in self.AS.keys() or
+                if (((compA.metabolite, compB.metabolite) not in self.AS.keys() or
                         (compA.metabolite, compB.metabolite) not in self.AS.keys())):
                     res = self.agent_score(compA, compB)
                     self.AS[(compA.metabolite, compB.metabolite)] = res
@@ -194,8 +192,7 @@ class Nims:
     def all_SS(self):
         for compA in self.compounds:
             for compB in self.compounds:
-                if (compA != compB and
-                        ((compA.metabolite, compB.metabolite) not in self.SS.keys() or
+                if (((compA.metabolite, compB.metabolite) not in self.SS.keys() or
                         (compA.metabolite, compB.metabolite) not in self.SS.keys())):
                     res = self.synergy_score(compA, compB)
                     self.SS[(compA.metabolite, compB.metabolite)] = res
@@ -218,6 +215,3 @@ class Nims:
         with open("data/SS.pkl", "rb") as f:
                 self.SS = pickle.load(f)
         return self.SS
-
-    def get_comp_obj_with_metabolite(self):
-        return

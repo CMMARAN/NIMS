@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NIMS | SS Ranking</title>
+  <script src="static/js/jquery-1.9.0.js"> </script>
+  <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='res/Institut_Pertanian_Bogor_logo.png') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.min.css') }}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+</head>
+<body>
+  <header>
+    <nav class="top-nav light-blue">
+      <div>
+        <div class="row">
+          <div class="col s3">
+          <ul id="nav-mobile" class="side-nav fixed">
+          <br>
+           <center>
+             <img src="static/res/Institut_Pertanian_Bogor_logo.png" alt="IPB Logo" style="width:100px;height:100px;">
+           </center>
+              {% for name, url in navigation_url %}
+              <li{% if url==request.path %} class="light-blue" {% endif %}>
+              <a href="{{ url }}"{% if url==request.path %} style="color:white;"{% endif %}>{{ name }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="page-header offset-s3">
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col s12 offset-s2">
+      <h2 class="header" style="color:#03a9f4">All Ranking</h2>
+       <table id="example" class="display" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Compound 1</th>
+                <th>Compound 2</th>
+                <th>Synergy Score</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Rank</th>
+                <th>Compound 1</th>
+                <th>Compound 2</th>
+                <th>Synergy Score</th>
+            </tr>
+        </tfoot>
+        <tbody>
+        {% for key, value in data.items() %}
+            <tr>
+                <td>{{ value[1] }}</td>
+                <td>{{ key[0] }}</td>
+                <td>{{ key[1] }}</td>
+                <td>{{ value[0] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+      <br>
+
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
+$('#example').dataTable( {
+    "order": [ 3, 'desc' ]
+} );
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NIMS | Synergistic Score</title>
+  <script src="static/js/jquery-1.9.0.js"> </script>
+  <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='res/Institut_Pertanian_Bogor_logo.png') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
+</head>
+<body>
+  <header>
+    <nav class="top-nav light-blue">
+      <div>
+        <div class="row">
+          <div class="col s3">
+          <ul id="nav-mobile" class="side-nav fixed">
+          <br>
+           <center>
+             <img src="static/res/Institut_Pertanian_Bogor_logo.png" alt="IPB Logo" style="width:100px;height:100px;">
+           </center>
+              {% for name, url in navigation_url %}
+              <li{% if url==request.path %} class="light-blue" {% endif %}>
+              <a href="{{ url }}"{% if url==request.path %} style="color:white;"{% endif %}>{{ name }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="page-header offset-s3">
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col s12 offset-s2">
+      <h2 class="header" style="color:#03a9f4">About</h2>
+      <p class="caption" align="justify">
+      <i>Network target-based Identification of Multicomponent Synergy</i> (NIMS) adalah metode yang diajukan S. Li <i>et al</i> 
+      (2010) untuk mengevaluasi efek sinergis antar senyawa aktif pada tanaman (<a href="http://www.biomedcentral.com/content/pdf/1752-0509-5-S1-S10.pdf" target="_blank">paper</a>). 
+      <br><br>
+      Secara garis besar, metode NIMS diilustrasikan pada Gambar berikut:
+      <br><br>
+      </p>
+      <center><img src="static/res/gambar5.png" alt="NIMS"></center>
+      <br>
+      <p class="caption" align="justify">
+      Pada <i>website</i> ini, metode NIMS diaplikasikan pada kombinasi senyawa yang terdapat pada 10 tanaman terhadap penyakit <i>Diabetes Mellitus</i> tipe 2.
+      Adapun tanaman-tanaman tersebut adalah <i>Mangifera indica, Phaseolus vulgaris, Catharanthus roseus, Syzygium cumini, Punica granatum, Argemone mexicana, Salvia miltiorrhiza, Daucus carota, Glycyrrhiza uralensis,</i> dan <i>Zea mays L</i>.
+      </p>
+      <br>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('select').material_select();
+});
+</script>
+</body>
+</html>

@@ -1,2 +1,0 @@
-sum_plant_compound = 
-[['Mangifera indica', 32], ['Phaseolus vulgaris', 100], ['Catharanthus roseus', 65], ['Syzygium cumini', 23], ['Punica granatum', 63], ['Argemone mexicana', 9], ['Salvia miltiorrhiza', 45], ['Daucus carota', 45], ['Glycyrrhiza uralensis', 124], ['Zea mays L.', 21]]
